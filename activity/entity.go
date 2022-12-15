@@ -10,5 +10,5 @@ type Activity struct {
 	Title     string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt time.Time
+	DeletedAt *time.Time
 }
