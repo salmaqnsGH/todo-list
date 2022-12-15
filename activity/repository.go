@@ -1,6 +1,8 @@
 package activity
 
 import (
+	"fmt"
+
 	"gorm.io/gorm"
 )
 
@@ -8,6 +10,7 @@ type Repository interface {
 	FindAll() ([]Activity, error)
 	FindByID(ID int) (Activity, error)
 	Create(activity Activity) (Activity, error)
+	Delete(ID int)
 }
 
 type repository struct {
@@ -32,7 +35,7 @@ func (r *repository) FindAll() ([]Activity, error) {
 func (r *repository) FindByID(ID int) (Activity, error) {
 	var activity Activity
 	err := r.db.Where("id = ?", ID).Find(&activity).Error
-
+	fmt.Println(err)
 	if err != nil {
 		return activity, err
 	}
@@ -48,4 +51,9 @@ func (r *repository) Create(activity Activity) (Activity, error) {
 	}
 
 	return activity, nil
+}
+
+func (r *repository) Delete(ID int) {
+	var activity Activity
+	r.db.Where("id = ?", ID).Delete(&activity)
 }

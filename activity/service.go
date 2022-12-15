@@ -4,6 +4,7 @@ type Service interface {
 	GetActivities() ([]Activity, error)
 	GetActivityByID(input GetActivityByIdInput) (Activity, error)
 	CreateActivity(input CreateActivityInput) (Activity, error)
+	DeleteActivity(input GetActivityByIdInput)
 }
 
 type service struct {
@@ -43,4 +44,8 @@ func (s *service) CreateActivity(input CreateActivityInput) (Activity, error) {
 	}
 
 	return newActivity, nil
+}
+
+func (s *service) DeleteActivity(input GetActivityByIdInput) {
+	s.repository.Delete(input.ID)
 }

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"todo-list/activity"
 	"todo-list/helper"
@@ -71,5 +72,29 @@ func (h *activityHandler) CreateActivity(c *gin.Context) {
 	}
 
 	response := helper.APIResponse("Success create activity", http.StatusOK, "success", activity.FormatActivity(newActivity))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *activityHandler) DeleteActivity(c *gin.Context) {
+	var input activity.GetActivityByIdInput
+
+	activity, err := h.service.GetActivityByID(input)
+	if err != nil {
+		response := helper.APIResponse("Failed get detail of activity", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	fmt.Println(activity)
+	fmt.Println(err)
+	err = c.ShouldBindUri(&input)
+	h.service.DeleteActivity(input)
+	if err != nil {
+		response := helper.APIResponse("Failed delete activity 2", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	data := gin.H{"is_deleted": true}
+	response := helper.APIResponse("Successfully delete activity", http.StatusOK, "success", data)
 	c.JSON(http.StatusOK, response)
 }

@@ -8,8 +8,8 @@ type ActivityFormatter struct {
 	ID        int        `json:"id"`
 	Email     string     `json:"email"`
 	Title     string     `json:"title"`
-	CreatedAt time.Time  `json:"CreatedAt"`
-	UpdatedAt time.Time  `json:"UpdatedAt"`
+	CreatedAt *time.Time `json:"CreatedAt"`
+	UpdatedAt *time.Time `json:"UpdatedAt"`
 	DeletedAt *time.Time `json:"DeletedAt"`
 }
 
