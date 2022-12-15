@@ -25,7 +25,7 @@ func (h *activityHandler) GetActivities(c *gin.Context) {
 		return
 	}
 
-	response := helper.APIResponse("Lists of activities", http.StatusOK, "success", activity.FormatActivities(activities))
+	response := helper.APIResponse("Success", http.StatusOK, "Success", activity.FormatActivities(activities))
 	c.JSON(http.StatusOK, response)
 }
 
