@@ -1,14 +1,16 @@
 package activity
 
-import "time"
+import (
+	"time"
+)
 
 type ActivityFormatter struct {
-	ID        int       `json:"id"`
-	Email     string    `json:"email"`
-	Title     string    `json:"title"`
-	CreatedAt time.Time `json:"CreatedAt"`
-	UpdatedAt time.Time `json:"UpdatedAt"`
-	DeletedAt time.Time `json:"DeletedAt"`
+	ID        int        `json:"id"`
+	Email     string     `json:"email"`
+	Title     string     `json:"title"`
+	CreatedAt time.Time  `json:"CreatedAt"`
+	UpdatedAt time.Time  `json:"UpdatedAt"`
+	DeletedAt *time.Time `json:"DeletedAt"`
 }
 
 func FormatActivities(activities []Activity) []ActivityFormatter {
@@ -29,7 +31,10 @@ func FormatActivity(activity Activity) ActivityFormatter {
 	activityFormatter.Title = activity.Title
 	activityFormatter.CreatedAt = activity.CreatedAt
 	activityFormatter.UpdatedAt = activity.UpdatedAt
-	activityFormatter.DeletedAt = activity.DeletedAt
+
+	if activity.DeletedAt == nil {
+		activityFormatter.DeletedAt = nil
+	}
 
 	return activityFormatter
 }
