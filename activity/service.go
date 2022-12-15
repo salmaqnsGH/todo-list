@@ -2,6 +2,7 @@ package activity
 
 type Service interface {
 	GetActivities() ([]Activity, error)
+	GetActivityByID(input GetActivityByIdInput) (Activity, error)
 }
 
 type service struct {
@@ -19,4 +20,13 @@ func (s *service) GetActivities() ([]Activity, error) {
 	}
 
 	return activities, nil
+}
+
+func (s *service) GetActivityByID(input GetActivityByIdInput) (Activity, error) {
+	activity, err := s.repository.FindByID(input.ID)
+	if err != nil {
+		return activity, err
+	}
+
+	return activity, nil
 }

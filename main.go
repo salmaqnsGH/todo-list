@@ -30,6 +30,7 @@ func main() {
 	router.Use(cors.Default())
 
 	router.GET("/activity-groups", activityHandler.GetActivities)
+	router.GET("/activity-groups/:id", activityHandler.GetActivityById)
 
 	router.Run()
 }

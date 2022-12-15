@@ -27,3 +27,24 @@ func (h *activityHandler) GetActivities(c *gin.Context) {
 	response := helper.APIResponse("Lists of activities", http.StatusOK, "success", activity.FormatActivities(activities))
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *activityHandler) GetActivityById(c *gin.Context) {
+	var input activity.GetActivityByIdInput
+
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed get detail of activity", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	activityDetail, err := h.service.GetActivityByID(input)
+	if err != nil {
+		response := helper.APIResponse("Failed get detail of activity", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Lists of activities", http.StatusOK, "success", activity.FormatActivity(activityDetail))
+	c.JSON(http.StatusOK, response)
+}
