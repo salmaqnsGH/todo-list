@@ -3,6 +3,7 @@ package activity
 type Service interface {
 	GetActivities() ([]Activity, error)
 	GetActivityByID(input GetActivityByIdInput) (Activity, error)
+	CreateActivity(input CreateActivityInput) (Activity, error)
 }
 
 type service struct {
@@ -29,4 +30,17 @@ func (s *service) GetActivityByID(input GetActivityByIdInput) (Activity, error) 
 	}
 
 	return activity, nil
+}
+
+func (s *service) CreateActivity(input CreateActivityInput) (Activity, error) {
+	activity := Activity{}
+	activity.Email = input.Email
+	activity.Title = input.Title
+
+	newActivity, err := s.repository.Create(activity)
+	if err != nil {
+		return newActivity, err
+	}
+
+	return newActivity, nil
 }

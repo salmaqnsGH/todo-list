@@ -48,3 +48,28 @@ func (h *activityHandler) GetActivityById(c *gin.Context) {
 	response := helper.APIResponse("Lists of activities", http.StatusOK, "success", activity.FormatActivity(activityDetail))
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *activityHandler) CreateActivity(c *gin.Context) {
+	var input activity.CreateActivityInput
+
+	err := c.ShouldBindJSON(&input)
+
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Failed to create activity", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	newActivity, err := h.service.CreateActivity(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to create activity", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success create activity", http.StatusOK, "success", activity.FormatActivity(newActivity))
+	c.JSON(http.StatusOK, response)
+}

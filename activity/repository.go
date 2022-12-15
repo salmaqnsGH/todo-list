@@ -1,10 +1,13 @@
 package activity
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Repository interface {
 	FindAll() ([]Activity, error)
 	FindByID(ID int) (Activity, error)
+	Create(activity Activity) (Activity, error)
 }
 
 type repository struct {
@@ -29,6 +32,16 @@ func (r *repository) FindAll() ([]Activity, error) {
 func (r *repository) FindByID(ID int) (Activity, error) {
 	var activity Activity
 	err := r.db.Where("id = ?", ID).Find(&activity).Error
+
+	if err != nil {
+		return activity, err
+	}
+
+	return activity, nil
+}
+
+func (r *repository) Create(activity Activity) (Activity, error) {
+	err := r.db.Create(&activity).Error
 
 	if err != nil {
 		return activity, err

@@ -31,6 +31,7 @@ func main() {
 
 	router.GET("/activity-groups", activityHandler.GetActivities)
 	router.GET("/activity-groups/:id", activityHandler.GetActivityById)
+	router.POST("/activity-groups", activityHandler.CreateActivity)
 
 	router.Run()
 }
