@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"todo-list/helper"
 	"todo-list/todo"
@@ -62,7 +63,9 @@ func (h *todoHandler) GetTodoById(c *gin.Context) {
 
 	todoDetail, err := h.service.GetTodoByID(input)
 	if err != nil {
-		response := helper.FormatNotFoundError(input.ID, todoDetail)
+		errMessage := fmt.Sprintf("Todo with ID %v Not Found", input)
+
+		response := helper.FormatNotFoundError(errMessage, todoDetail)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
