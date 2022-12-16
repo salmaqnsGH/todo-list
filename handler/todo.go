@@ -97,3 +97,26 @@ func (h *todoHandler) CreateTodo(c *gin.Context) {
 	response := helper.APIResponse("Success", http.StatusOK, "Success", todo.FormatCreateTodo(newTodo))
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *todoHandler) DeleteTodo(c *gin.Context) {
+	var input todo.TodoIdInput
+	todo := todo.Todo{}
+
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to delete todo", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	err = h.service.DeleteTodo(input)
+	if err != nil {
+		errMessage := fmt.Sprintf("Todo with ID %v Not Found", input)
+		response := helper.FormatNotFoundError(errMessage, todo)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success", http.StatusOK, "Success", todo)
+	c.JSON(http.StatusOK, response)
+}

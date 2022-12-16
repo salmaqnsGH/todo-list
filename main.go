@@ -43,6 +43,7 @@ func main() {
 	router.GET("/todo-items", todoHandler.GetTodos)
 	router.GET("/todo-items/:id", todoHandler.GetTodoById)
 	router.POST("/todo-items", todoHandler.CreateTodo)
+	router.DELETE("/todo-items/:id", todoHandler.DeleteTodo)
 
 	router.Run()
 }

@@ -5,6 +5,7 @@ type Service interface {
 	GetTodos() ([]Todo, error)
 	GetTodoByID(input TodoIdInput) (Todo, error)
 	CreateTodo(input CreateTodoInput) (Todo, error)
+	DeleteTodo(input TodoIdInput) error
 }
 
 type service struct {
@@ -53,4 +54,13 @@ func (s *service) CreateTodo(input CreateTodoInput) (Todo, error) {
 	}
 
 	return newTodo, nil
+}
+
+func (s *service) DeleteTodo(input TodoIdInput) error {
+	err := s.repository.Delete(input.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
