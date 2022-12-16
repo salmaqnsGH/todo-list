@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"todo-list/activity"
 	"todo-list/helper"
@@ -34,15 +33,14 @@ func (h *activityHandler) GetActivityById(c *gin.Context) {
 
 	err := c.ShouldBindUri(&input)
 	if err != nil {
-		response := helper.APIResponse("Not Found 1", http.StatusBadRequest, "error", nil)
+		response := helper.APIResponse("Failed to get activity", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
 	activityDetail, err := h.service.GetActivityByID(input)
 	if err != nil {
-		errMessage := fmt.Sprintf("Activity with ID %v Not Found", input.ID)
-		response := helper.FormatNotFoundError(errMessage, "Not Found", activityDetail)
+		response := helper.FormatNotFoundError(input.ID, activityDetail)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
@@ -79,10 +77,15 @@ func (h *activityHandler) DeleteActivity(c *gin.Context) {
 	activity := activity.Activity{}
 
 	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to delete activity", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
 	err = h.service.DeleteActivity(input)
 	if err != nil {
-		errMessage := fmt.Sprintf("Activity with ID %v Not Found", input.ID)
-		response := helper.FormatNotFoundError("Not Found", errMessage, activity)
+		response := helper.FormatNotFoundError(input.ID, activity)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}

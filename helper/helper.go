@@ -1,6 +1,10 @@
 package helper
 
-import "github.com/go-playground/validator/v10"
+import (
+	"fmt"
+
+	"github.com/go-playground/validator/v10"
+)
 
 type Response struct {
 	Status  string      `json:"status"`
@@ -28,10 +32,12 @@ func FormatValidationError(err error) []string {
 	return errors
 }
 
-func FormatNotFoundError(status string, message string, data interface{}) Response {
+func FormatNotFoundError(ID int, data interface{}) Response {
+	errMessage := fmt.Sprintf("Activity with ID %v Not Found", ID)
+
 	response := Response{
-		Status:  status,
-		Message: message,
+		Status:  "Not Found",
+		Message: errMessage,
 		Data:    data,
 	}
 
