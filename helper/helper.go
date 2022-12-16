@@ -10,7 +10,6 @@ type Response struct {
 
 // TODO: is code needed?
 func APIResponse(message string, code int, status string, data interface{}) Response {
-
 	response := Response{
 		Status:  status,
 		Message: message,
@@ -27,4 +26,14 @@ func FormatValidationError(err error) []string {
 	}
 
 	return errors
+}
+
+func FormatNotFoundError(status string, message string, data interface{}) Response {
+	response := Response{
+		Status:  status,
+		Message: message,
+		Data:    data,
+	}
+
+	return response
 }
