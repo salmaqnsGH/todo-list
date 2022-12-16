@@ -3,6 +3,7 @@ package todo
 type Service interface {
 	GetTodosByActivityID(activityID string) ([]Todo, error)
 	GetTodos() ([]Todo, error)
+	GetTodoByID(input TodoIdInput) (Todo, error)
 }
 
 type service struct {
@@ -29,4 +30,13 @@ func (s *service) GetTodos() ([]Todo, error) {
 	}
 
 	return todos, nil
+}
+
+func (s *service) GetTodoByID(input TodoIdInput) (Todo, error) {
+	todo, err := s.repository.FindByID(input.ID)
+	if err != nil {
+		return todo, err
+	}
+
+	return todo, nil
 }

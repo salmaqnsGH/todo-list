@@ -41,6 +41,7 @@ func main() {
 	todoHandler := handler.NewTodoHandler(todoService)
 
 	router.GET("/todo-items", todoHandler.GetTodos)
+	router.GET("/todo-items/:id", todoHandler.GetTodoById)
 
 	router.Run()
 }

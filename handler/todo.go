@@ -48,5 +48,25 @@ func (h *todoHandler) GetTodos(c *gin.Context) {
 		response := helper.APIResponse("Success", http.StatusOK, "Success", todo.FormatTodos(todos))
 		c.JSON(http.StatusOK, response)
 	}
+}
 
+func (h *todoHandler) GetTodoById(c *gin.Context) {
+	var input todo.TodoIdInput
+
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get todo", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	todoDetail, err := h.service.GetTodoByID(input)
+	if err != nil {
+		response := helper.FormatNotFoundError(input.ID, todoDetail)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success", http.StatusOK, "Success", todo.FormatTodo(todoDetail))
+	c.JSON(http.StatusOK, response)
 }

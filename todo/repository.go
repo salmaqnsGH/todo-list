@@ -9,6 +9,7 @@ import (
 type Repository interface {
 	FindAllByActivityId(activityID string) ([]Todo, error)
 	FindAll() ([]Todo, error)
+	FindByID(ID int) (Todo, error)
 }
 
 type repository struct {
@@ -42,4 +43,13 @@ func (r *repository) FindAll() ([]Todo, error) {
 	}
 
 	return todos, nil
+}
+
+func (r *repository) FindByID(ID int) (Todo, error) {
+	var todo Todo
+	if err := r.db.Where("id = ?", ID).First(&todo).Error; err != nil {
+		return todo, err
+	}
+
+	return todo, nil
 }
