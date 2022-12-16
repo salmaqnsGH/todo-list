@@ -56,7 +56,7 @@ func (h *activityHandler) CreateActivity(c *gin.Context) {
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
 		var activity activity.Activity
-		response := helper.FormatBadRequest(activity)
+		response := helper.FormatBadRequest("title cannot be null", activity)
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
@@ -64,7 +64,7 @@ func (h *activityHandler) CreateActivity(c *gin.Context) {
 	newActivity, err := h.service.CreateActivity(input)
 	if err != nil {
 		var activity activity.Activity
-		response := helper.FormatBadRequest(activity)
+		response := helper.FormatBadRequest("title cannot be null", activity)
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
@@ -117,7 +117,7 @@ func (h *activityHandler) UpdateActivity(c *gin.Context) {
 	if err != nil {
 		fmt.Println("1", err)
 		var activity activity.Activity
-		response := helper.FormatBadRequest(activity)
+		response := helper.FormatBadRequest("title cannot be null", activity)
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}

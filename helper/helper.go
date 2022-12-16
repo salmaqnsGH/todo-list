@@ -44,10 +44,10 @@ func FormatNotFoundError(ID int, data interface{}) Response {
 	return response
 }
 
-func FormatBadRequest(data interface{}) Response {
+func FormatBadRequest(message string, data interface{}) Response {
 	response := Response{
 		Status:  "Bad Request",
-		Message: "title cannot be null",
+		Message: message,
 		Data:    data,
 	}
 
