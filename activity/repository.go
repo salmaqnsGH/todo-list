@@ -8,7 +8,7 @@ type Repository interface {
 	FindAll() ([]Activity, error)
 	FindByID(ID int) (Activity, error)
 	Create(activity Activity) (Activity, error)
-	Delete(ID int)
+	Delete(ID int) error
 }
 
 type repository struct {
@@ -49,7 +49,11 @@ func (r *repository) Create(activity Activity) (Activity, error) {
 	return activity, nil
 }
 
-func (r *repository) Delete(ID int) {
+func (r *repository) Delete(ID int) error {
 	var activity Activity
-	r.db.Where("id = ?", ID).Delete(&activity)
+	if err := r.db.Where("id = ?", ID).First(&activity).Delete(&activity).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

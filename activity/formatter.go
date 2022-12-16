@@ -38,3 +38,22 @@ func FormatActivity(activity Activity) ActivityFormatter {
 
 	return activityFormatter
 }
+
+type CreateActivityResponse struct {
+	CreatedAt *time.Time `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
+	ID        int        `json:"id"`
+	Title     string     `json:"title"`
+	Email     string     `json:"email"`
+}
+
+func FormatCreateActivity(activity Activity) CreateActivityResponse {
+	var createActivityResponse CreateActivityResponse
+	createActivityResponse.CreatedAt = activity.CreatedAt
+	createActivityResponse.UpdatedAt = activity.UpdatedAt
+	createActivityResponse.ID = activity.ID
+	createActivityResponse.Title = activity.Title
+	createActivityResponse.Email = activity.Email
+
+	return createActivityResponse
+}

@@ -55,47 +55,38 @@ func (h *activityHandler) CreateActivity(c *gin.Context) {
 	var input activity.CreateActivityInput
 
 	err := c.ShouldBindJSON(&input)
-
 	if err != nil {
-		errors := helper.FormatValidationError(err)
-		errorMessage := gin.H{"errors": errors}
-
-		response := helper.APIResponse("Failed to create activity", http.StatusUnprocessableEntity, "error", errorMessage)
+		var activity activity.Activity
+		response := helper.FormatBadRequest(activity)
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
 
 	newActivity, err := h.service.CreateActivity(input)
 	if err != nil {
-		response := helper.APIResponse("Failed to create activity", http.StatusBadRequest, "error", nil)
-		c.JSON(http.StatusBadRequest, response)
+		var activity activity.Activity
+		response := helper.FormatBadRequest(activity)
+		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
 
-	response := helper.APIResponse("Success create activity", http.StatusOK, "success", activity.FormatActivity(newActivity))
+	response := helper.APIResponse("Success", http.StatusOK, "Success", activity.FormatCreateActivity(newActivity))
 	c.JSON(http.StatusOK, response)
 }
 
 func (h *activityHandler) DeleteActivity(c *gin.Context) {
 	var input activity.GetActivityByIdInput
+	activity := activity.Activity{}
 
-	activity, err := h.service.GetActivityByID(input)
+	err := c.ShouldBindUri(&input)
+	err = h.service.DeleteActivity(input)
 	if err != nil {
-		response := helper.APIResponse("Failed get detail of activity", http.StatusBadRequest, "error", nil)
-		c.JSON(http.StatusBadRequest, response)
-		return
-	}
-	fmt.Println(activity)
-	fmt.Println(err)
-	err = c.ShouldBindUri(&input)
-	h.service.DeleteActivity(input)
-	if err != nil {
-		response := helper.APIResponse("Failed delete activity 2", http.StatusBadRequest, "error", nil)
+		errMessage := fmt.Sprintf("Activity with ID %v Not Found", input.ID)
+		response := helper.FormatNotFoundError("Not Found", errMessage, activity)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	data := gin.H{"is_deleted": true}
-	response := helper.APIResponse("Successfully delete activity", http.StatusOK, "success", data)
+	response := helper.APIResponse("Success", http.StatusOK, "Success", activity)
 	c.JSON(http.StatusOK, response)
 }

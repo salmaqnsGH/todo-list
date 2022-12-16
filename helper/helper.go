@@ -37,3 +37,13 @@ func FormatNotFoundError(status string, message string, data interface{}) Respon
 
 	return response
 }
+
+func FormatBadRequest(data interface{}) Response {
+	response := Response{
+		Status:  "Bad Request",
+		Message: "title cannot be null",
+		Data:    data,
+	}
+
+	return response
+}
