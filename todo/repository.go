@@ -10,6 +10,7 @@ type Repository interface {
 	FindAllByActivityId(activityID string) ([]Todo, error)
 	FindAll() ([]Todo, error)
 	FindByID(ID int) (Todo, error)
+	Create(todo Todo) (Todo, error)
 }
 
 type repository struct {
@@ -48,6 +49,16 @@ func (r *repository) FindAll() ([]Todo, error) {
 func (r *repository) FindByID(ID int) (Todo, error) {
 	var todo Todo
 	if err := r.db.Where("id = ?", ID).First(&todo).Error; err != nil {
+		return todo, err
+	}
+
+	return todo, nil
+}
+
+func (r *repository) Create(todo Todo) (Todo, error) {
+	err := r.db.Create(&todo).Error
+
+	if err != nil {
 		return todo, err
 	}
 

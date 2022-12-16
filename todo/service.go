@@ -4,6 +4,7 @@ type Service interface {
 	GetTodosByActivityID(activityID string) ([]Todo, error)
 	GetTodos() ([]Todo, error)
 	GetTodoByID(input TodoIdInput) (Todo, error)
+	CreateTodo(input CreateTodoInput) (Todo, error)
 }
 
 type service struct {
@@ -39,4 +40,17 @@ func (s *service) GetTodoByID(input TodoIdInput) (Todo, error) {
 	}
 
 	return todo, nil
+}
+
+func (s *service) CreateTodo(input CreateTodoInput) (Todo, error) {
+	todo := Todo{}
+	todo.ActivityGroupId = input.ActivityGroupId
+	todo.Title = input.Title
+
+	newTodo, err := s.repository.Create(todo)
+	if err != nil {
+		return newTodo, err
+	}
+
+	return newTodo, nil
 }

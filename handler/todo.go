@@ -73,3 +73,27 @@ func (h *todoHandler) GetTodoById(c *gin.Context) {
 	response := helper.APIResponse("Success", http.StatusOK, "Success", todo.FormatTodo(todoDetail))
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *todoHandler) CreateTodo(c *gin.Context) {
+	var input todo.CreateTodoInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		var todo todo.Todo
+		response := helper.FormatBadRequest("title cannot be null 1", todo)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	// TODO: refactor error
+	newTodo, err := h.service.CreateTodo(input)
+	if err != nil {
+		var todo todo.Todo
+		response := helper.FormatBadRequest(fmt.Sprint(err), todo)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	response := helper.APIResponse("Success", http.StatusOK, "Success", todo.FormatCreateTodo(newTodo))
+	c.JSON(http.StatusOK, response)
+}
