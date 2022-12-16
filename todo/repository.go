@@ -12,6 +12,7 @@ type Repository interface {
 	FindByID(ID int) (Todo, error)
 	Create(todo Todo) (Todo, error)
 	Delete(ID int) error
+	Update(todo Todo) (Todo, error)
 }
 
 type repository struct {
@@ -73,4 +74,14 @@ func (r *repository) Delete(ID int) error {
 	}
 
 	return nil
+}
+
+func (r *repository) Update(todo Todo) (Todo, error) {
+	err := r.db.Save(&todo).Error
+
+	if err != nil {
+		return todo, err
+	}
+
+	return todo, nil
 }

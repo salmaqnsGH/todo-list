@@ -1,11 +1,14 @@
 package todo
 
+import "time"
+
 type Service interface {
 	GetTodosByActivityID(activityID string) ([]Todo, error)
 	GetTodos() ([]Todo, error)
 	GetTodoByID(input TodoIdInput) (Todo, error)
 	CreateTodo(input CreateTodoInput) (Todo, error)
 	DeleteTodo(input TodoIdInput) error
+	UpdateTodo(inputID TodoIdInput, inputData CreateTodoInput) (Todo, error)
 }
 
 type service struct {
@@ -63,4 +66,22 @@ func (s *service) DeleteTodo(input TodoIdInput) error {
 	}
 
 	return nil
+}
+
+func (s *service) UpdateTodo(inputID TodoIdInput, inputData CreateTodoInput) (Todo, error) {
+	todo, err := s.repository.FindByID(inputID.ID)
+	if err != nil {
+		return todo, err
+	}
+
+	current_time := time.Now()
+	todo.Title = inputData.Title
+	todo.UpdatedAt = &current_time
+
+	updatedTodo, err := s.repository.Update(todo)
+	if err != nil {
+		return updatedTodo, err
+	}
+
+	return updatedTodo, nil
 }

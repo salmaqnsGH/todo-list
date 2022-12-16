@@ -120,3 +120,45 @@ func (h *todoHandler) DeleteTodo(c *gin.Context) {
 	response := helper.APIResponse("Success", http.StatusOK, "Success", todo)
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *todoHandler) UpdatedTodo(c *gin.Context) {
+	var inputID todo.TodoIdInput
+
+	err := c.ShouldBindUri(&inputID)
+	if err != nil {
+		response := helper.APIResponse("Failed to update todo", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	todoById, err := h.service.GetTodoByID(inputID)
+	if err != nil {
+		errMessage := fmt.Sprintf("Todo with ID %v Not Found", inputID)
+
+		response := helper.FormatNotFoundError(errMessage, todoById)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	var inputData todo.CreateTodoInput
+	err = c.ShouldBindJSON(&inputData)
+	if err != nil {
+		fmt.Println("1", err)
+		var todo todo.Todo
+		response := helper.FormatBadRequest("title cannot be null", todo)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	updatedTodo, err := h.service.UpdateTodo(inputID, inputData)
+	if err != nil {
+		errMessage := fmt.Sprintf("Todo with ID %v Not Found", inputID)
+
+		response := helper.FormatNotFoundError(errMessage, updatedTodo)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success", http.StatusOK, "Success", todo.FormatTodo(updatedTodo))
+	c.JSON(http.StatusOK, response)
+}
