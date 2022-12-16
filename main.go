@@ -6,6 +6,7 @@ import (
 
 	"todo-list/activity"
 	"todo-list/handler"
+	"todo-list/todo"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -34,6 +35,12 @@ func main() {
 	router.POST("/activity-groups", activityHandler.CreateActivity)
 	router.DELETE("/activity-groups/:id", activityHandler.DeleteActivity)
 	router.PATCH("/activity-groups/:id", activityHandler.UpdateActivity)
+
+	todoRepository := todo.NewRepository(db)
+	todoService := todo.NewService(todoRepository)
+	todoHandler := handler.NewTodoHandler(todoService)
+
+	router.GET("/todo-items", todoHandler.GetTodos)
 
 	router.Run()
 }
