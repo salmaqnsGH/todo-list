@@ -34,19 +34,20 @@ func (h *activityHandler) GetActivityById(c *gin.Context) {
 
 	err := c.ShouldBindUri(&input)
 	if err != nil {
-		response := helper.APIResponse("Failed get detail of activity", http.StatusBadRequest, "error", nil)
+		response := helper.APIResponse("Not Found 1", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
 	activityDetail, err := h.service.GetActivityByID(input)
 	if err != nil {
-		response := helper.APIResponse("Failed get detail of activity", http.StatusBadRequest, "error", nil)
+		errMessage := fmt.Sprintf("Activity with ID %v Not Found", input.ID)
+		response := helper.FormatNotFoundError(errMessage, "Not Found", activityDetail)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	response := helper.APIResponse("Lists of activities", http.StatusOK, "success", activity.FormatActivity(activityDetail))
+	response := helper.APIResponse("Success", http.StatusOK, "Success", activity.FormatActivity(activityDetail))
 	c.JSON(http.StatusOK, response)
 }
 

@@ -1,8 +1,6 @@
 package activity
 
 import (
-	"fmt"
-
 	"gorm.io/gorm"
 )
 
@@ -34,9 +32,7 @@ func (r *repository) FindAll() ([]Activity, error) {
 
 func (r *repository) FindByID(ID int) (Activity, error) {
 	var activity Activity
-	err := r.db.Where("id = ?", ID).Find(&activity).Error
-	fmt.Println(err)
-	if err != nil {
+	if err := r.db.Where("id = ?", ID).First(&activity).Error; err != nil {
 		return activity, err
 	}
 
