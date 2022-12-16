@@ -1,10 +1,13 @@
 package activity
 
+import "time"
+
 type Service interface {
 	GetActivities() ([]Activity, error)
-	GetActivityByID(input GetActivityByIdInput) (Activity, error)
+	GetActivityByID(input ActivityIdInput) (Activity, error)
 	CreateActivity(input CreateActivityInput) (Activity, error)
-	DeleteActivity(input GetActivityByIdInput) error
+	DeleteActivity(input ActivityIdInput) error
+	UpdateActivity(inputID ActivityIdInput, inputData CreateActivityInput) (Activity, error)
 }
 
 type service struct {
@@ -24,7 +27,7 @@ func (s *service) GetActivities() ([]Activity, error) {
 	return activities, nil
 }
 
-func (s *service) GetActivityByID(input GetActivityByIdInput) (Activity, error) {
+func (s *service) GetActivityByID(input ActivityIdInput) (Activity, error) {
 	activity, err := s.repository.FindByID(input.ID)
 	if err != nil {
 		return activity, err
@@ -46,11 +49,30 @@ func (s *service) CreateActivity(input CreateActivityInput) (Activity, error) {
 	return newActivity, nil
 }
 
-func (s *service) DeleteActivity(input GetActivityByIdInput) error {
+func (s *service) DeleteActivity(input ActivityIdInput) error {
 	err := s.repository.Delete(input.ID)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (s *service) UpdateActivity(inputID ActivityIdInput, inputData CreateActivityInput) (Activity, error) {
+	activity, err := s.repository.FindByID(inputID.ID)
+	if err != nil {
+		return activity, err
+	}
+
+	current_time := time.Now()
+	activity.Title = inputData.Title
+	activity.Email = inputData.Email
+	activity.UpdatedAt = &current_time
+
+	updatedActivity, err := s.repository.Update(activity)
+	if err != nil {
+		return updatedActivity, err
+	}
+
+	return updatedActivity, nil
 }

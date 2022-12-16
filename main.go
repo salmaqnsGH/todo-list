@@ -33,6 +33,7 @@ func main() {
 	router.GET("/activity-groups/:id", activityHandler.GetActivityById)
 	router.POST("/activity-groups", activityHandler.CreateActivity)
 	router.DELETE("/activity-groups/:id", activityHandler.DeleteActivity)
+	router.PATCH("/activity-groups/:id", activityHandler.UpdateActivity)
 
 	router.Run()
 }

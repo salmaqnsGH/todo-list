@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"todo-list/activity"
 	"todo-list/helper"
@@ -29,7 +30,7 @@ func (h *activityHandler) GetActivities(c *gin.Context) {
 }
 
 func (h *activityHandler) GetActivityById(c *gin.Context) {
-	var input activity.GetActivityByIdInput
+	var input activity.ActivityIdInput
 
 	err := c.ShouldBindUri(&input)
 	if err != nil {
@@ -73,7 +74,7 @@ func (h *activityHandler) CreateActivity(c *gin.Context) {
 }
 
 func (h *activityHandler) DeleteActivity(c *gin.Context) {
-	var input activity.GetActivityByIdInput
+	var input activity.ActivityIdInput
 	activity := activity.Activity{}
 
 	err := c.ShouldBindUri(&input)
@@ -91,5 +92,43 @@ func (h *activityHandler) DeleteActivity(c *gin.Context) {
 	}
 
 	response := helper.APIResponse("Success", http.StatusOK, "Success", activity)
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *activityHandler) UpdateActivity(c *gin.Context) {
+	var inputID activity.ActivityIdInput
+
+	err := c.ShouldBindUri(&inputID)
+	if err != nil {
+		response := helper.APIResponse("Failed to update activity", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	activityById, err := h.service.GetActivityByID(inputID)
+	if err != nil {
+		response := helper.FormatNotFoundError(inputID.ID, activityById)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	var inputData activity.CreateActivityInput
+	err = c.ShouldBindJSON(&inputData)
+	if err != nil {
+		fmt.Println("1", err)
+		var activity activity.Activity
+		response := helper.FormatBadRequest(activity)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	updatedActivity, err := h.service.UpdateActivity(inputID, inputData)
+	if err != nil {
+		response := helper.FormatNotFoundError(inputID.ID, updatedActivity)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success", http.StatusOK, "Success", activity.FormatActivity(updatedActivity))
 	c.JSON(http.StatusOK, response)
 }
