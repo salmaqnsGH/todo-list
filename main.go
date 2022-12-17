@@ -7,6 +7,7 @@ import (
 	"todo-list/activity"
 	"todo-list/handler"
 	"todo-list/todo"
+	"todo-list/util"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,12 @@ import (
 )
 
 func main() {
-	dsn := "user:password@tcp(127.0.0.1:3306)/todolist?charset=utf8mb4&parseTime=True&loc=Local"
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+
+	dsn := config.MySqlUser + ":" + config.MySqlPassword + "@tcp(" + config.MySqlHost + ":" + config.MySqlPort + ")/" + config.MySqlDBName + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -46,5 +52,5 @@ func main() {
 	router.DELETE("/todo-items/:id", todoHandler.DeleteTodo)
 	router.PATCH("/todo-items/:id", todoHandler.UpdatedTodo)
 
-	router.Run()
+	router.Run(":3030")
 }
