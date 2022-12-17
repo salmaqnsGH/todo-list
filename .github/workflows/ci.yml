@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: "Mysql Setup"
         run : |
-          sudo /etc/init.d/mysql start
+          sudo systemctl start mysql
           mysql -e 'CREATE DATABASE ${{ env.MYSQL_DBNAME }};' -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
           
       - name: Set up Go 1.19
