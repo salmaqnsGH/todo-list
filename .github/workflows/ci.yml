@@ -18,14 +18,10 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          # MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          # MYSQL_HOST: 127.0.0.1
-          # MYSQL_PORT: 3306
-          # MYSQL_USER: user
-          # MYSQL_PASSWORD: password
-          # MYSQL_DBNAME: todolist
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: localdb
+          MYSQL_DATABASE: todolist
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: rootpassword
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
