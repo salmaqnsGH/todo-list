@@ -15,20 +15,16 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
+      mysql:
         image: mysql:8.0
-        # Provide the password for postgres
         env:
+          MYSQL_ROOT_PASSWORD: password
           MYSQL_HOST: 127.0.0.1
           MYSQL_PORT: 3306
           MYSQL_USER: user
           MYSQL_PASSWORD: password
           MYSQL_DBNAME: todolist
-        # Set health checks to wait until postgres has started
         ports:
-          # Maps tcp port 5432 on service container to the host
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     
