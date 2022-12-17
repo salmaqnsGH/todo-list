@@ -41,7 +41,7 @@ func (h *activityHandler) GetActivityById(c *gin.Context) {
 
 	activityDetail, err := h.service.GetActivityByID(input)
 	if err != nil {
-		errMessage := fmt.Sprintf("Activity with ID %v Not Found", input)
+		errMessage := fmt.Sprintf("Activity with ID %v Not Found", input.ID)
 
 		response := helper.FormatNotFoundError(errMessage, activityDetail)
 		c.JSON(http.StatusBadRequest, response)
@@ -88,7 +88,7 @@ func (h *activityHandler) DeleteActivity(c *gin.Context) {
 
 	err = h.service.DeleteActivity(input)
 	if err != nil {
-		errMessage := fmt.Sprintf("Activity with ID %v Not Found", input)
+		errMessage := fmt.Sprintf("Activity with ID %v Not Found", input.ID)
 
 		response := helper.FormatNotFoundError(errMessage, activity)
 		c.JSON(http.StatusBadRequest, response)
@@ -111,7 +111,7 @@ func (h *activityHandler) UpdateActivity(c *gin.Context) {
 
 	activityById, err := h.service.GetActivityByID(inputID)
 	if err != nil {
-		errMessage := fmt.Sprintf("Activity with ID %v Not Found", inputID)
+		errMessage := fmt.Sprintf("Activity with ID %v Not Found", inputID.ID)
 
 		response := helper.FormatNotFoundError(errMessage, activityById)
 		c.JSON(http.StatusBadRequest, response)
@@ -123,7 +123,7 @@ func (h *activityHandler) UpdateActivity(c *gin.Context) {
 	if err != nil {
 		fmt.Println("1", err)
 		var activity activity.Activity
-		response := helper.FormatBadRequest("title cannot be null", activity)
+		response := helper.FormatBadRequest("title cannot be null", activity.ID)
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
