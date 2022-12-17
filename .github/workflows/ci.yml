@@ -29,6 +29,11 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     
     steps:
+      - name: "Mysql Setup"
+        run : |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.MYSQL_DBNAME }};' -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
+          
       - name: Set up Go 1.19
         uses: actions/setup-go@v3
         with:
