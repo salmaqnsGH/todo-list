@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mysql:
+    image: mysql/mysql-server:8.0
+    ports:
+      - "3305:3306"
+    environment:
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DBNAME}   
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_SOURCE=user:password@tcp(127.0.0.1:3306/todolist?charset=utf8mb4&parseTime=True&loc=Local
+    volumes:
+      - ".:/app"
+    depends_on:
+      - mysql
+    command: [ "/app/main" ]

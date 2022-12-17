@@ -14,23 +14,23 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_HOST: 127.0.0.1
-          MYSQL_PORT: 3306
-          MYSQL_USER: user
-          MYSQL_PASSWORD: password
-          MYSQL_DBNAME: todolist
-        ports:
-          - 8888:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    env:
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_PORT: 3306
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DBNAME: todolist
+    
     steps:
-      - uses: actions/checkout@v1
-      - run: mysql -h 127.0.0.1 --port 8888 -u user -p password -e 'CREATE DATABASE IF NOT EXISTS todolist;'
+      - name: "MySql Setup"
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.MYSQL_DBNAME }};' -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
 
-      - name: Set up Go 1.xx
+      - name: "Checkout Code"
+        uses: actions/checkout@v2
+
+      - name: Set up Go 1.19
         uses: actions/setup-go@v3
         with:
           go-version: ^1.19

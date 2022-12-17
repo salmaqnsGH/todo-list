@@ -10,7 +10,13 @@ migratedown:
 docker-build:
 	docker build --tag todo-list .
 
+docker-compose-up:
+	docker compose up -d
+
 docker-run-local:
 	docker run todo-list
+
+docker-run:
+	docker run -e MYSQL_HOST=172.17.0.1 -e MYSQL_USER=user -e MYSQL_PASSWORD=password -e MYSQL_DBNAME=todolist -p 8090:3030 todo-list
 
 .PHONY: migrateup migratedown
