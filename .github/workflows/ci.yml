@@ -30,7 +30,7 @@ jobs:
     
     steps:
       - uses: actions/checkout@v1
-      - run: mysql -h 127.0.0.1 --port 3306 -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS${{ env.MYSQL_DBNAME }};'
+      - run: mysql -h 127.0.0.1 --port 3306 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS todolist;'
 
       # - name: "Mysql Setup"
       #   run : |
