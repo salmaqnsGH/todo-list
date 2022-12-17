@@ -1,7 +1,7 @@
 migrateup:
-	migrate -database "mysql://user:password@tcp(127.0.0.1:3306)/todolist" -path db/migrations up
+	migrate -path db/migrations -database "mysql://user:password@tcp(127.0.0.1:3306)/todolist" -verbose up
 
 migratedown:
-	migrate -database "mysql://user:password@tcp(127.0.0.1:3306)/todolist" -path db/migrations down
+	migrate -path db/migrations -database "mysql://user:password@tcp(127.0.0.1:3306)/todolist" -verbose down
 
 .PHONY: migrateup migratedown
