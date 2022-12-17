@@ -63,7 +63,7 @@ func (h *todoHandler) GetTodoById(c *gin.Context) {
 
 	todoDetail, err := h.service.GetTodoByID(input)
 	if err != nil {
-		errMessage := fmt.Sprintf("Todo with ID %v Not Found", input)
+		errMessage := fmt.Sprintf("Todo with ID %v Not Found", input.ID)
 
 		response := helper.FormatNotFoundError(errMessage, todoDetail)
 		c.JSON(http.StatusBadRequest, response)
@@ -111,7 +111,7 @@ func (h *todoHandler) DeleteTodo(c *gin.Context) {
 
 	err = h.service.DeleteTodo(input)
 	if err != nil {
-		errMessage := fmt.Sprintf("Todo with ID %v Not Found", input)
+		errMessage := fmt.Sprintf("Todo with ID %v Not Found", input.ID)
 		response := helper.FormatNotFoundError(errMessage, todo)
 		c.JSON(http.StatusBadRequest, response)
 		return
@@ -133,7 +133,7 @@ func (h *todoHandler) UpdatedTodo(c *gin.Context) {
 
 	todoById, err := h.service.GetTodoByID(inputID)
 	if err != nil {
-		errMessage := fmt.Sprintf("Todo with ID %v Not Found", inputID)
+		errMessage := fmt.Sprintf("Todo with ID %v Not Found", inputID.ID)
 
 		response := helper.FormatNotFoundError(errMessage, todoById)
 		c.JSON(http.StatusBadRequest, response)
@@ -152,7 +152,7 @@ func (h *todoHandler) UpdatedTodo(c *gin.Context) {
 
 	updatedTodo, err := h.service.UpdateTodo(inputID, inputData)
 	if err != nil {
-		errMessage := fmt.Sprintf("Todo with ID %v Not Found", inputID)
+		errMessage := fmt.Sprintf("Todo with ID %v Not Found", inputID.ID)
 
 		response := helper.FormatNotFoundError(errMessage, updatedTodo)
 		c.JSON(http.StatusBadRequest, response)
