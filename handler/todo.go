@@ -85,7 +85,6 @@ func (h *todoHandler) CreateTodo(c *gin.Context) {
 		return
 	}
 
-	// TODO: refactor error
 	newTodo, err := h.service.CreateTodo(input)
 	if err != nil {
 		var todo todo.Todo
