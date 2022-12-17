@@ -18,7 +18,7 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          # MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_HOST: 127.0.0.1
           MYSQL_PORT: 3306
           MYSQL_USER: user
@@ -31,9 +31,9 @@ jobs:
     steps:
       - name: "Mysql Setup"
         run : |
-          sudo systemctl start mysql
+          sudo /etc/init.d/mysql start
           mysql -e 'CREATE DATABASE ${{ env.MYSQL_DBNAME }};' -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
-          
+
       - name: Set up Go 1.19
         uses: actions/setup-go@v3
         with:
