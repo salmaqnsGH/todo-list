@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 
-	"todo-list/activity"
-	"todo-list/handler"
-	"todo-list/todo"
-	"todo-list/util"
+	"github.com/salmaqnsGH/todo-list/activity"
+	"github.com/salmaqnsGH/todo-list/handler"
+	"github.com/salmaqnsGH/todo-list/todo"
+	"github.com/salmaqnsGH/todo-list/util"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

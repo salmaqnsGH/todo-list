@@ -3,8 +3,9 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"todo-list/helper"
-	"todo-list/todo"
+
+	"github.com/salmaqnsGH/todo-list/helper"
+	"github.com/salmaqnsGH/todo-list/todo"
 
 	"github.com/gin-gonic/gin"
 )
